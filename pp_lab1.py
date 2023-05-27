@@ -31,9 +31,7 @@ def imprimir_menu_parcial() -> str:
     Lista de opciones a elegir en el menu, a su vez utiliza la funcion imprimir_dato para mostrarlo por consola
     """
     opciones_menu =\
-    """
-    1- Mostrar la lista de todos los jugadores del Dream Team
-    
+    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner.\n 3-  
     """
     imprimir_dato(opciones_menu)
 
@@ -59,6 +57,45 @@ def mostrar_lista_completa_jugadores(lista: dict[list]):
         posicion = jugador['posicion']
         mensaje = "{0} - {1}".format(nombre, posicion)
         print(mensaje)
+def mostrar_jugador_segun_input(lista: dict[list]):
+    """
+    recibe una lista de jugadores, y muestra por print las estadisticas del jugador que requiera el usuario mediante su numero de indice. Retorna una lista con esta informacion.         
+    """
+    """
+    incluyendo temporadas jugadas, puntos totales, promedio de puntos por partido, rebotes totales, promedio de rebotes por partido, asistencias totales, promedio de asistencias por partido, robos totales, bloqueos totales, porcentaje de tiros de campo, porcentaje de tiros libres y porcentaje de tiros triples. 
+    """
+    respuesta = input("Ingrese el indice numerico de el jugador deseado: ")
+    if re.match('^[1-9]$|^[1][0-2]$', respuesta):
+        indice = int(respuesta) - 1
+        jugador = lista[indice]
+        datos_mostrados = []
+        datos_mostrados.append({
+             'nombre': jugador['nombre'],
+             'jugador': jugador['posicion'],  
+             'estadisticas': {
+                    'temporadas': jugador['estadisticas']['temporadas'],
+                    'puntos_totales': jugador['estadisticas']['puntos_totales'],
+                    'promedio_puntos_por_partido': jugador['estadisticas']['promedio_puntos_por_partido'],
+                    'rebotes_totales': jugador['estadisticas']['rebotes_totales'],
+                    'promedio_rebotes_por_partido': jugador['estadisticas']['promedio_rebotes_por_partido'],
+                    'asistencias_totales': jugador['estadisticas']['asistencias_totales'],
+                    'promedio_asistencias_por_partido': jugador['estadisticas']['promedio_asistencias_por_partido'],
+                    'robos_totales': jugador['estadisticas']['robos_totales'],
+                    'bloqueos_totales': jugador['estadisticas']['bloqueos_totales'],
+                    'porcentaje_tiros_de_campo': jugador['estadisticas']['porcentaje_tiros_de_campo'],
+                    'porcentaje_tiros_libres': jugador['estadisticas']['porcentaje_tiros_libres'],
+                    'porcentaje_tiros_triples': jugador['estadisticas']['porcentaje_tiros_triples']
+                }
+            })
+                                
+        mensaje = "{0}".format(json.dumps(datos_mostrados, indent= 4))
+        print(mensaje)
+        return datos_mostrados
+    else:
+        print("Solo hay 12 jugadores en el Dream team.")
+    
+
+
 
 def aplicacion_menu_parcial(lista: list[dict]):
     """
@@ -73,7 +110,7 @@ def aplicacion_menu_parcial(lista: list[dict]):
             case 1:
                 mostrar_lista_completa_jugadores(copia_lista_jugadores)
             case 2:
-                pass
+                mostrar_jugador_segun_input(copia_lista_jugadores)
             case 3:
                 pass
             case 4:
