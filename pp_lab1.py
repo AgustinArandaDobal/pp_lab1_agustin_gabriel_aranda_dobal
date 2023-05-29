@@ -32,7 +32,7 @@ def imprimir_menu_parcial() -> str:
     Lista de opciones a elegir en el menu, a su vez utiliza la funcion imprimir_dato para mostrarlo por consola
     """
     opciones_menu =\
-    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor. \n 12- mostrar el jugador con la mayor cantidad de robos totales. \n 13- mostrar el jugador con la mayor cantidad de bloqueos totales \n 14- Ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor. \n 15- promedio de puntos por partido del equipo excluyendo al jugador con la menor cantidad de puntos por partido. \n 16- Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos \n 17- 
+    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor. \n 12- mostrar el jugador con la mayor cantidad de robos totales. \n 13- mostrar el jugador con la mayor cantidad de bloqueos totales \n 14- Ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor. \n 15- promedio de puntos por partido del equipo excluyendo al jugador con la menor cantidad de puntos por partido. \n 16- Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos \n 17- ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor. \n 18- mostrar el jugador con la mayor cantidad de temporadas jugadas
     """
     imprimir_dato(opciones_menu)
 
@@ -192,13 +192,19 @@ def calcular_max_min(lista:list, clave:str, min = bool):
     if min == False:
         max = 0
         jugador_max = None
+        jugadores_max =[]
         for jugador in lista:
             valor = float(jugador['estadisticas'][clave])
             if valor > max:
                 max = valor
                 jugador_max = jugador['nombre']
+            elif valor == max:
+                jugadores_max.append(jugador['nombre'])
         if jugador_max is None:
                 print("No hay datos disponibles.")
+        elif jugadores_max is not None:
+            jugadores_max_str = ', '.join(jugadores_max)
+            print("Los jugadores con la mayor cantidad de {0}, son: {1}. Y estos tienen {2} temporadas cada uno".format(clave.replace("_"," "), jugadores_max_str, max))
         else:
                 print("El jugador con la mayor cantidad de {0}, es {1}".format(clave.replace("_"," "), jugador_max))
                 print("Cantidad de {0}: {1}".format(clave.replace("_"," "),max))
@@ -254,6 +260,7 @@ def calcular_promedio_equipo_sin_maxmin_jugador(lista:list,clave:str):
     print("El promedio de puntos por partido del equipo excluyendo al jugador con menor promedio es: {:.2f}".format(promedio_equipo))
 
 def calcular_jugador_mayor_logros(lista: list) -> str:
+    
     max_logros = 0
     jugador_max_logros_nombre = None
     
@@ -312,6 +319,10 @@ def aplicacion_menu_parcial(lista: list[dict]):
                 calcular_promedio_equipo_sin_maxmin_jugador(copia_lista_jugadores,"promedio_puntos_por_partido")
             case 16:
                 calcular_jugador_mayor_logros(copia_lista_jugadores)
+            case 17:
+                mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "porcentaje_tiros_triples" )
+            case 18:
+                calcular_max_min(copia_lista_jugadores,"temporadas", min = False)
             case 22:
                 print("Gracias por utilizar la aplicación, hasta la proxima")
                 break
