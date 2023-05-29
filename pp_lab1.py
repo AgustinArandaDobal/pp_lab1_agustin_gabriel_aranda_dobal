@@ -32,7 +32,7 @@ def imprimir_menu_parcial() -> str:
     Lista de opciones a elegir en el menu, a su vez utiliza la funcion imprimir_dato para mostrarlo por consola
     """
     opciones_menu =\
-    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor. \n 12- mostrar el jugador con la mayor cantidad de robos totales. \n 13- mostrar el jugador con la mayor cantidad de bloqueos totales \n 14- Ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor. \n 15- 
+    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor. \n 12- mostrar el jugador con la mayor cantidad de robos totales. \n 13- mostrar el jugador con la mayor cantidad de bloqueos totales \n 14- Ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor. \n 15- promedio de puntos por partido del equipo excluyendo al jugador con la menor cantidad de puntos por partido. \n 16- Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos \n 17- 
     """
     imprimir_dato(opciones_menu)
 
@@ -185,22 +185,36 @@ def verificar_logro_salon_fama(lista:list):
             print("!!!!!! ESE NOMBRE NO CORRESPONDE A UNO ASOCIADO AL DREAM TEAM !!!!!")
             print("Por favor ingrese el nombre de algun jugador del Dream Team: Michael Jordan,Magic Johnson, Larry Bird,Charles Barkley, Scottie Pippen,David Robinson, Patrick Ewing, Karl Malone, John Stockton, Clyde Drexler, Chris Mullin, Christian Laettner")
 
-def calcular_max(lista:list, clave:str):
+def calcular_max_min(lista:list, clave:str, min = bool):
     """
-    Recibe por parametro una lista y una clave de tipo str. La clave representa un valor a calcular, en este caso tiene que ser el mayor de la lista.
+    Recibe por parametro una lista, una clave de tipo str y la variable min como bool false. La clave representa un valor a calcular, y dependiendo de como se pase el parametro min puede calcular el menor o el mayor, retorna el nombre y el promedio de puntos por partido, del menor promedio. retorna nombre y clave en caso de que min sea True.
     """
-    max = 0
-    jugador_max = None
-    for jugador in lista:
-        valor = float(jugador['estadisticas'][clave])
-        if valor > max:
-            max = valor
-            jugador_max = jugador['nombre']
-    if jugador_max is None:
-        print("No hay datos disponibles.")
-    else:
-        print("El jugador con la mayor cantidad de {0}, es {1}".format(clave.replace("_"," "), jugador_max))
-        print("Cantidad de {0}: {1}".format(clave.replace("_"," "),max))
+    if min == False:
+        max = 0
+        jugador_max = None
+        for jugador in lista:
+            valor = float(jugador['estadisticas'][clave])
+            if valor > max:
+                max = valor
+                jugador_max = jugador['nombre']
+        if jugador_max is None:
+                print("No hay datos disponibles.")
+        else:
+                print("El jugador con la mayor cantidad de {0}, es {1}".format(clave.replace("_"," "), jugador_max))
+                print("Cantidad de {0}: {1}".format(clave.replace("_"," "),max))
+    elif min == True:
+        minimo=lista[0]['estadisticas'][clave] #float("inf")
+        jugador_min = None
+        for jugador in lista:
+            valor = float(jugador['estadisticas'][clave])
+            if valor < minimo:
+                minimo = valor
+                jugador_min = {jugador['nombre']:{jugador['estadisticas'][clave]}}
+        if jugador_min is None:
+                print("No hay datos disponibles.")
+        else:
+                return jugador_min
+    
 
 def mostrar_jugadores_mayor_promedio(lista:dict[list],clave:str):
     """
@@ -224,6 +238,38 @@ def mostrar_jugadores_mayor_promedio(lista:dict[list],clave:str):
     if not jugadores_mayor_promedio:
      print("No hay jugadores con un promedio mayor a ese numero")
 
+def calcular_promedio_equipo_sin_maxmin_jugador(lista:list,clave:str):
+    """
+    recibe una lista y una clave por parametro, utiliza la funcion calcular_max_min para obtener el menor de la clave elegida y luego calcula el promedio del equipo excluyendo a ese, utiliza la funcion list para transformar el return (dict) y acceder a su primer clave que es 'nombre' que luego utilizaremos para comparar y excluir de los calculos. """
+
+    menor_jugador_promedio=calcular_max_min(copia_lista_jugadores, "promedio_puntos_por_partido", min=True)
+    jugador_min =  list(menor_jugador_promedio)[0]
+    total_puntos = 0
+    total_jugadores = 0
+    for jugador in lista:
+        if jugador['nombre'] != jugador_min:
+            total_puntos += float(jugador['estadisticas'][clave])
+            total_jugadores += 1
+    promedio_equipo = total_puntos / total_jugadores
+    print("El promedio de puntos por partido del equipo excluyendo al jugador con menor promedio es: {:.2f}".format(promedio_equipo))
+
+def calcular_jugador_mayor_logros(lista: list) -> str:
+    max_logros = 0
+    jugador_max_logros_nombre = None
+    
+    for jugador in lista:
+        logros = len(jugador["logros"])
+        if logros > max_logros:
+            max_logros = logros
+            jugador_max_logros_nombre = jugador["nombre"]
+            jugador_max_logros_detalle = jugador["logros"]
+    
+    if jugador_max_logros_nombre is not None:
+        logros_string = ', '.join(jugador_max_logros_detalle)
+        print("El jugador con mayor cantidad de logros conseguidos en distintas categorias es {0} y son {1}: {2} ".format(jugador_max_logros_nombre,max_logros+1,logros_string))
+    else:
+        print ("No hay jugadores con logros disponibles.")
+
 def aplicacion_menu_parcial(lista: list[dict]):
     """
     Esta funcion recibe una lista de diccionarios por parametro, y mediante la funcion menu_validado_parcial ejecuta el case del match correspondiente
@@ -245,11 +291,11 @@ def aplicacion_menu_parcial(lista: list[dict]):
             case 5:
                 verificar_logro_salon_fama(copia_lista_jugadores)
             case 6:
-                calcular_max(copia_lista_jugadores, 'rebotes_totales')
+                calcular_max_min(copia_lista_jugadores, 'rebotes_totales', min=False)
             case 7:
-                calcular_max(copia_lista_jugadores, "porcentaje_tiros_de_campo")
+                calcular_max_min(copia_lista_jugadores, "porcentaje_tiros_de_campo", min = False)
             case 8:
-                calcular_max(copia_lista_jugadores, "asistencias_totales")
+                calcular_max_min(copia_lista_jugadores, "asistencias_totales", min=False)
             case 9:
                 mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "promedio_puntos_por_partido")
             case 10:
@@ -257,11 +303,15 @@ def aplicacion_menu_parcial(lista: list[dict]):
             case 11:
                 mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "promedio_asistencias_por_partido" )
             case 12:
-                calcular_max(copia_lista_jugadores, "robos_totales")
+                calcular_max_min(copia_lista_jugadores, "robos_totales", min=False)
             case 13:
-                calcular_max(copia_lista_jugadores,"bloqueos_totales")
+                calcular_max_min(copia_lista_jugadores,"bloqueos_totales", min = False)
             case 14:
                 mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "porcentaje_tiros_libres" )
+            case 15:
+                calcular_promedio_equipo_sin_maxmin_jugador(copia_lista_jugadores,"promedio_puntos_por_partido")
+            case 16:
+                calcular_jugador_mayor_logros(copia_lista_jugadores)
             case 22:
                 print("Gracias por utilizar la aplicación, hasta la proxima")
                 break
