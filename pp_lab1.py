@@ -32,7 +32,7 @@ def imprimir_menu_parcial() -> str:
     Lista de opciones a elegir en el menu, a su vez utiliza la funcion imprimir_dato para mostrarlo por consola
     """
     opciones_menu =\
-    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales.
+    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.
     """
     imprimir_dato(opciones_menu)
 
@@ -193,6 +193,25 @@ def calcular_max(lista:list, clave:str):
         print("El jugador con la mayor cantidad de {0}, es {1}".format(clave.replace("_"," "), jugador_max))
         print("Cantidad de {0}: {1}".format(clave.replace("_"," "),max))
 
+def mostrar_jugadores_mayor_promedio(lista:dict[list],clave:str):
+    valor = float(input("Ingrese el valor a comparar: "))
+    jugadores_mayor_promedio = []
+    for jugador in lista:
+        promedio = jugador["estadisticas"][clave]
+        if promedio > valor:
+            jugadores_mayor_promedio.append({'nombre': jugador['nombre'],  
+             'estadisticas': {
+                    clave : jugador['estadisticas'][clave]}})
+    print("Los jugadores que han promediado mas de {0}{1} son:".format(valor,clave.replace("_"," ").replace("promedio","")))
+    for jugador in jugadores_mayor_promedio:     
+       nombre = jugador ['nombre']
+       estadistica = jugador['estadisticas'][clave]
+       print("{0} - {1}".format(nombre, estadistica))
+        
+
+    if not jugadores_mayor_promedio:
+     print("No hay jugadores con un promedio mayor a ese numero")
+
 def aplicacion_menu_parcial(lista: list[dict]):
     """
     Esta funcion recibe una lista de diccionarios por parametro, y mediante la funcion menu_validado_parcial ejecuta el case del match correspondiente
@@ -219,6 +238,12 @@ def aplicacion_menu_parcial(lista: list[dict]):
                 calcular_max(copia_lista_jugadores, "porcentaje_tiros_de_campo")
             case 8:
                 calcular_max(copia_lista_jugadores, "asistencias_totales")
+            case 9:
+                mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "promedio_puntos_por_partido")
+            case 10:
+                mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "promedio_rebotes_por_partido")
+            case 11:
+                mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "promedio_asistencias_por_partido" )
             case 22:
                 print("Gracias por utilizar la aplicación, hasta la proxima")
                 break
