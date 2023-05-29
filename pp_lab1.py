@@ -32,7 +32,7 @@ def imprimir_menu_parcial() -> str:
     Lista de opciones a elegir en el menu, a su vez utiliza la funcion imprimir_dato para mostrarlo por consola
     """
     opciones_menu =\
-    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n  
+    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales.
     """
     imprimir_dato(opciones_menu)
 
@@ -167,7 +167,31 @@ def mostrar_nombres_ordenados_ascendente(lista:list,):
                 promedio = jugador['estadisticas']['promedio_puntos_por_partido']
                 print("Nombre: {0}, Promedio: {1}".format(nombre,promedio))
                 break
+def verificar_logro_salon_fama(lista:list):
+    jugador_nombre = input("Ingrese el nombre del jugador:").lower()
+    for jugador in lista:
+        if jugador['nombre'].lower() == jugador_nombre:
+            if "Miembro del Salon de la Fama del Baloncesto" in  jugador['logros']:
+                print("El jugador ingresado es miembro del salon de la fama")
+            else:
+                print("El jugador no es miembro del salon de la fama")
+    else:
+            print("!!!!!! ESE NOMBRE NO CORRESPONDE A UNO ASOCIADO AL DREAM TEAM !!!!!")
+            print("Por favor ingrese el nombre de algun jugador del Dream Team: Michael Jordan,Magic Johnson, Larry Bird,Charles Barkley, Scottie Pippen,David Robinson, Patrick Ewing, Karl Malone, John Stockton, Clyde Drexler, Chris Mullin, Christian Laettner")
 
+def calcular_max(lista:list, clave:str):
+    max = 0
+    jugador_max = None
+    for jugador in lista:
+        valor = float(jugador['estadisticas'][clave])
+        if valor > max:
+            max = valor
+            jugador_max = jugador['nombre']
+    if jugador_max is None:
+        print("No hay datos disponibles.")
+    else:
+        print("El jugador con la mayor cantidad de {0}, es {1}".format(clave.replace("_"," "), jugador_max))
+        print("Cantidad de {0}: {1}".format(clave.replace("_"," "),max))
 
 def aplicacion_menu_parcial(lista: list[dict]):
     """
@@ -188,9 +212,13 @@ def aplicacion_menu_parcial(lista: list[dict]):
             case 4:
                 mostrar_nombres_ordenados_ascendente(copia_lista_jugadores)
             case 5:
-                pass
+                verificar_logro_salon_fama(copia_lista_jugadores)
             case 6:
-                pass
+                calcular_max(copia_lista_jugadores, 'rebotes_totales')
+            case 7:
+                calcular_max(copia_lista_jugadores, "porcentaje_tiros_de_campo")
+            case 8:
+                calcular_max(copia_lista_jugadores, "asistencias_totales")
             case 22:
                 print("Gracias por utilizar la aplicación, hasta la proxima")
                 break
