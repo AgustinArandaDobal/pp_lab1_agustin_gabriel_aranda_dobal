@@ -32,7 +32,7 @@ def imprimir_menu_parcial() -> str:
     Lista de opciones a elegir en el menu, a su vez utiliza la funcion imprimir_dato para mostrarlo por consola
     """
     opciones_menu =\
-    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.
+    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor. \n 12- mostrar el jugador con la mayor cantidad de robos totales. \n 13- mostrar el jugador con la mayor cantidad de bloqueos totales \n 14- Ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor. \n 15- 
     """
     imprimir_dato(opciones_menu)
 
@@ -112,6 +112,9 @@ def guardar_archivo_csv(lista:list, nombre_archivo:str,jugador:dict):
     print("Estadísticas guardadas en el archivo CSV correctamente.")
 
 def buscar_jugadores_por_nombre(lista: list):
+    """
+    recibe por parametro una lista, luego le pide al usuario mediante un input que ingrese un nombre a buscar, con el metodo re.search busca coincidencias (si tienen al menos 4 letras iguales)
+    """
     nombre_buscar = input("Ingrese el nombre del jugador que desea buscar: ").lower()
     
     encontrados = []
@@ -168,6 +171,9 @@ def mostrar_nombres_ordenados_ascendente(lista:list,):
                 print("Nombre: {0}, Promedio: {1}".format(nombre,promedio))
                 break
 def verificar_logro_salon_fama(lista:list):
+    """
+    Recibe porparametro una lista, y mediante un input busca si coincide el nombre ingresado con el nombre de la lista, para luego buscar el logro "Miembro del Salon de la Fama del Baloncesto"
+    """
     jugador_nombre = input("Ingrese el nombre del jugador:").lower()
     for jugador in lista:
         if jugador['nombre'].lower() == jugador_nombre:
@@ -180,6 +186,9 @@ def verificar_logro_salon_fama(lista:list):
             print("Por favor ingrese el nombre de algun jugador del Dream Team: Michael Jordan,Magic Johnson, Larry Bird,Charles Barkley, Scottie Pippen,David Robinson, Patrick Ewing, Karl Malone, John Stockton, Clyde Drexler, Chris Mullin, Christian Laettner")
 
 def calcular_max(lista:list, clave:str):
+    """
+    Recibe por parametro una lista y una clave de tipo str. La clave representa un valor a calcular, en este caso tiene que ser el mayor de la lista.
+    """
     max = 0
     jugador_max = None
     for jugador in lista:
@@ -194,6 +203,9 @@ def calcular_max(lista:list, clave:str):
         print("Cantidad de {0}: {1}".format(clave.replace("_"," "),max))
 
 def mostrar_jugadores_mayor_promedio(lista:dict[list],clave:str):
+    """
+    Recibe por parametro una lista y una clave de tipo str. La clave representa un valor a calcular, en este caso tiene que ser mayor que el input que ingresa el usuario.
+    """
     valor = float(input("Ingrese el valor a comparar: "))
     jugadores_mayor_promedio = []
     for jugador in lista:
@@ -202,7 +214,7 @@ def mostrar_jugadores_mayor_promedio(lista:dict[list],clave:str):
             jugadores_mayor_promedio.append({'nombre': jugador['nombre'],  
              'estadisticas': {
                     clave : jugador['estadisticas'][clave]}})
-    print("Los jugadores que han promediado mas de {0}{1} son:".format(valor,clave.replace("_"," ").replace("promedio","")))
+    print("Los jugadores que tienen mas de {0} de {1} son:".format(valor,clave.replace("_"," ").replace(" ", " de ",1)))
     for jugador in jugadores_mayor_promedio:     
        nombre = jugador ['nombre']
        estadistica = jugador['estadisticas'][clave]
@@ -244,6 +256,12 @@ def aplicacion_menu_parcial(lista: list[dict]):
                 mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "promedio_rebotes_por_partido")
             case 11:
                 mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "promedio_asistencias_por_partido" )
+            case 12:
+                calcular_max(copia_lista_jugadores, "robos_totales")
+            case 13:
+                calcular_max(copia_lista_jugadores,"bloqueos_totales")
+            case 14:
+                mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "porcentaje_tiros_libres" )
             case 22:
                 print("Gracias por utilizar la aplicación, hasta la proxima")
                 break
