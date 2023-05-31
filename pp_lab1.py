@@ -1,3 +1,4 @@
+
 import json
 import re
 import csv
@@ -7,7 +8,7 @@ def leer_archivo(path_completo: str) -> list[dict]:
     """
     Recibe la dirección del archivo JSON.
     Utiliza la declaración with para manejar la apertura y el cierre del archivo.
-    Retorna una lista de diccionarios con el contenido de la clave "heroes".
+    Retorna una lista de diccionarios con el contenido de la clave "Jugadores".
     """
     with open(path_completo, "r") as archivo:
         datos_json = json.load(archivo) 
@@ -32,7 +33,7 @@ def imprimir_menu_parcial() -> str:
     Lista de opciones a elegir en el menu, a su vez utiliza la funcion imprimir_dato para mostrarlo por consola
     """
     opciones_menu =\
-    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor. \n 12- mostrar el jugador con la mayor cantidad de robos totales. \n 13- mostrar el jugador con la mayor cantidad de bloqueos totales \n 14- Ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor. \n 15- promedio de puntos por partido del equipo excluyendo al jugador con la menor cantidad de puntos por partido. \n 16- Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos \n 17- ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor. \n 18- mostrar el jugador con la mayor cantidad de temporadas jugadas
+    """ 1- Mostrar la lista de todos los jugadores del Dream Team.\n 2- Ingrese el indice numerico de alguno de los siguientes jugadores para recibir sus estadisticas completas: 1)Michael Jordan,2)Magic Johnson, 3)Larry Bird,4)Charles Barkley, 5)Scottie Pippen,6)David Robinson, 7)Patrick Ewing, 8)Karl Malone, 9)John Stockton, 10)Clyde Drexler, 11)Chris Mullin, 12)Christian Laettner. Si desea guardar dichas estadisticas seleccione si luego.\n 3- Ingrese el nombre de algun jugador del Dream Team para ver todos sus logros. \n 4- Mostrar al Dream Team con el promedio de puntos por partidos ordenados alfabeticamente \n 5- Ingrese el nombre de un jugador del Dream Team para saber si forma parte del salon de la fama. \n 6- Mostrar el jugador con la mayor cantidad de rebotes totales. \n 7-Mostrar el jugador con el mayor porcentaje de tiros de campo. \n 8- Mostrar el jugador con la mayor cantidad de asistencias totales. \n 9- Ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor \n 10- ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor. \n 11- ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor. \n 12- mostrar el jugador con la mayor cantidad de robos totales. \n 13- mostrar el jugador con la mayor cantidad de bloqueos totales \n 14- Ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor. \n 15- promedio de puntos por partido del equipo excluyendo al jugador con la menor cantidad de puntos por partido. \n 16- Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos \n 17- ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor. \n 18- mostrar el jugador con la mayor cantidad de temporadas jugadas. \n 19- ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha. \n 20- Salir del programa.
     """
     imprimir_dato(opciones_menu)
 
@@ -44,7 +45,7 @@ def menu_validado_parcial()->int:
     imprimir_menu_parcial()
 
     respuesta = input("Ingrese una opcion: ")
-    if re.match('^[1-9]$|^[1-2][0-9]$', respuesta):
+    if re.match('^[1-9]$|^[1-2][0]|23$', respuesta):
         return int(respuesta)
     return -1
 
@@ -135,7 +136,7 @@ def buscar_jugadores_por_nombre(lista: list):
     else:
         print("No hay coincidencias con el nombre ingresado")
 
-def quicksort(lista:list, ascendente: bool = True)->list:
+def quicksort(lista:list,clave:str,ascendente: bool,clave_estadistica = None)->list:
     """
     Se le pasa como parametro la lista, si la lista tiene un solo elemento o esta vacia la retorna como esta, y si no utilizando tres listas vacias va guardando los diferentes resultados de las comparaciones y al final retorna  las listas de manera que queden ordenadas de manera ascendente o descendente segun se requiera.
     """
@@ -147,29 +148,46 @@ def quicksort(lista:list, ascendente: bool = True)->list:
     igual = []
     mayor = []
 
-    for jugador in lista:
-        if (jugador < pivot and ascendente) or (jugador > pivot and not ascendente):
-            menor.append(jugador)
-        elif jugador == pivot:
-            igual.append(jugador)
-        else:
-            mayor.append(jugador)
-    return quicksort(menor, ascendente) + igual + quicksort(mayor, ascendente)
+    if clave == 'estadistica':
+            for jugador in lista:
+                if (jugador[clave] < pivot[clave] and ascendente) or (jugador[clave] > pivot[clave] and not ascendente):
+                    menor.append(jugador)
+                elif jugador[clave] == pivot[clave]:
+                    igual.append(jugador)
+                else:
+                    mayor.append(jugador)
+            return quicksort(menor,clave,ascendente) + igual + quicksort(mayor,clave,ascendente)
+    else:   
+        for jugador in lista:
+            if (jugador[clave] < pivot[clave] and ascendente) or (jugador[clave] > pivot[clave] and not ascendente):
+                menor.append(jugador)
+            elif jugador[clave] == pivot[clave]:
+                igual.append(jugador)
+            else:
+                mayor.append(jugador)
+            return quicksort(menor,clave,ascendente) + igual + quicksort(mayor,clave,ascendente)
 
-def mostrar_nombres_ordenados_ascendente(lista:list,):
+def mostrar_nombres_ordenados_ascendente(lista:list):
     """
     Guarda los nombres en una lista, para luegos ordenarlos de manera alfabetica con la funcion quicksort, y compara los nombres guardados con la lista que contiene todos los datos para que cuando haya una coincidencia le asigne el promedio correspondiente a ese jugador.
     """
-    nombres = []
-    for jugador in lista:
-        nombres.append(jugador['nombre'])
-    nombres_ordenados = quicksort(nombres)
-    for nombre in nombres_ordenados:
-        for jugador in lista:
-            if jugador['nombre'] == nombre:
-                promedio = jugador['estadisticas']['promedio_puntos_por_partido']
-                print("Nombre: {0}, Promedio: {1}".format(nombre,promedio))
-                break
+
+    lista_ordenada = quicksort(lista,'nombre',ascendente=True)
+    for jugador in lista_ordenada:
+        promedio = jugador['estadisticas']['promedio_puntos_por_partido']
+        nombre = jugador['nombre']
+        print("Nombre: {0}, Promedio: {1}".format(nombre,promedio))
+        
+    #nombres = []
+    # for jugador in lista:
+    #     nombres.append(jugador['nombre'])
+    # nombres_ordenados = quicksort(nombres,nombres,ascendente=True)
+    # for nombre in nombres_ordenados:
+    #     for jugador in lista:
+    #         if jugador['nombre'] == nombre:
+    #             promedio = jugador['estadisticas']['promedio_puntos_por_partido']
+    #             print("Nombre: {0}, Promedio: {1}".format(nombre,promedio))
+    #             break
 def verificar_logro_salon_fama(lista:list):
     """
     Recibe porparametro una lista, y mediante un input busca si coincide el nombre ingresado con el nombre de la lista, para luego buscar el logro "Miembro del Salon de la Fama del Baloncesto"
@@ -222,24 +240,33 @@ def calcular_max_min(lista:list, clave:str, min = bool):
                 return jugador_min
     
 
-def mostrar_jugadores_mayor_promedio(lista:dict[list],clave:str):
+def mostrar_jugadores_mayor_promedio(lista:dict[list],clave:str,ordenar_por_pos=False):
     """
     Recibe por parametro una lista y una clave de tipo str. La clave representa un valor a calcular, en este caso tiene que ser mayor que el input que ingresa el usuario.
     """
+    
     valor = float(input("Ingrese el valor a comparar: "))
     jugadores_mayor_promedio = []
     for jugador in lista:
         promedio = jugador["estadisticas"][clave]
         if promedio > valor:
-            jugadores_mayor_promedio.append({'nombre': jugador['nombre'],  
+                jugadores_mayor_promedio.append({'nombre': jugador['nombre'], 'posicion': jugador['posicion'],  
              'estadisticas': {
                     clave : jugador['estadisticas'][clave]}})
     print("Los jugadores que tienen mas de {0} de {1} son:".format(valor,clave.replace("_"," ").replace(" ", " de ",1)))
-    for jugador in jugadores_mayor_promedio:     
-       nombre = jugador ['nombre']
-       estadistica = jugador['estadisticas'][clave]
-       print("{0} - {1}".format(nombre, estadistica))
-        
+    if ordenar_por_pos == True:
+        jugadores_mayor_promedio_ordenado = quicksort(jugadores_mayor_promedio,'posicion',ascendente=True)
+        for jugador in jugadores_mayor_promedio_ordenado:     
+            nombre = jugador ['nombre']
+            posicion = jugador['posicion']
+            estadistica = jugador['estadisticas'][clave]   
+            print("{0} - {1} - {2}".format(nombre, estadistica, posicion))
+    else:
+        for jugador in jugadores_mayor_promedio:     
+            nombre = jugador ['nombre']
+            posicion = jugador['posicion']
+            estadistica = jugador['estadisticas'][clave]   
+            print("{0} - {1} - {2}".format(nombre, estadistica, posicion))
 
     if not jugadores_mayor_promedio:
      print("No hay jugadores con un promedio mayor a ese numero")
@@ -260,7 +287,6 @@ def calcular_promedio_equipo_sin_maxmin_jugador(lista:list,clave:str):
     print("El promedio de puntos por partido del equipo excluyendo al jugador con menor promedio es: {:.2f}".format(promedio_equipo))
 
 def calcular_jugador_mayor_logros(lista: list) -> str:
-    
     max_logros = 0
     jugador_max_logros_nombre = None
     
@@ -277,6 +303,9 @@ def calcular_jugador_mayor_logros(lista: list) -> str:
     else:
         print ("No hay jugadores con logros disponibles.")
 
+def ranking_jugadores_csv(lista:list):
+    pass
+            
 def aplicacion_menu_parcial(lista: list[dict]):
     """
     Esta funcion recibe una lista de diccionarios por parametro, y mediante la funcion menu_validado_parcial ejecuta el case del match correspondiente
@@ -323,9 +352,13 @@ def aplicacion_menu_parcial(lista: list[dict]):
                 mostrar_jugadores_mayor_promedio(copia_lista_jugadores, "porcentaje_tiros_triples" )
             case 18:
                 calcular_max_min(copia_lista_jugadores,"temporadas", min = False)
-            case 22:
+            case 19:
+                mostrar_jugadores_mayor_promedio(copia_lista_jugadores,"porcentaje_tiros_de_campo",ordenar_por_pos=True)
+            case 20:
                 print("Gracias por utilizar la aplicación, hasta la proxima")
                 break
+            case 23:
+                print("ok")
             case _:
                 print("Opcion ingresda invalida.")
 
